@@ -71,7 +71,6 @@ Matrix & Matrix::operator=(Matrix const & m)
 {
 	if(this != &m)
 	{
-
 		delete[] matrix[0];
 		delete[] matrix;
 

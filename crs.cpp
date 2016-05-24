@@ -181,7 +181,7 @@ Matrix CRS::expand_matrix()
 			m.matr()[i][cols[k]] = values[k];
 		}
 	}
-
+	
 	return m;
 }
 
