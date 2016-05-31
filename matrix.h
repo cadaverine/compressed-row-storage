@@ -26,6 +26,9 @@ public:
 	// Оператор присваивания
 	Matrix & operator=(Matrix const & m);
 
+	// Оператор индексации
+	double * operator[](int n) const;
+
 	// Случайная разреженная матрица
 	void random();
 
@@ -34,9 +37,6 @@ public:
 
 	// Количество столбцов
 	int cols_num() const;
-
-	// Указатель на матрицу
-	double ** matr() const;
 
 	// Консольный вывод матрицы
 	void console_out();

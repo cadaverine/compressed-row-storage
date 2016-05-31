@@ -54,7 +54,7 @@ Matrix::Matrix(Matrix const & m)
 	{
 		for (int j = 0; j < cols; j++)
 		{
-			matrix[i][j] = m.matr()[i][j];
+			matrix[i][j] = m[i][j];
 		}
 	}
 }
@@ -90,11 +90,17 @@ Matrix & Matrix::operator=(Matrix const & m)
 		{
 			for (int j = 0; j < cols; j++)
 			{
-				matrix[i][j] = m.matr()[i][j];
+				matrix[i][j] = m[i][j];
 			}
 		}
 	}
 	return * this;
+}
+
+// Оператор индексации
+double * Matrix::operator[](int n) const
+{
+	return matrix[n];
 }
 
 // Случайная разреженная матрица
@@ -123,12 +129,6 @@ int Matrix::rows_num() const
 int Matrix::cols_num() const
 {
 	return cols;
-}
-
-// Указатель на матрицу
-double ** Matrix::matr() const
-{
-	return matrix;
 }
 
 // Консольный вывод матрицы

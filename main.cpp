@@ -16,7 +16,7 @@ int main()
 
 	cout << endl << "Исходная матрица: " << endl;
 
-	Matrix m(5, 8);
+	Matrix m(6, 9);
 	m.random();
 	m.console_out();
 

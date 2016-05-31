@@ -44,7 +44,7 @@ CRS::CRS(Matrix const &m)
 	{
 		for (int j = 0; j < m.cols_num(); j++)
 		{
-			if (m.matr()[i][j] != 0) num_of_values++;
+			if (m[i][j] != 0) num_of_values++;
 		}
 	}
 	// Создаем массивы разреженного строчного формата
@@ -65,9 +65,9 @@ CRS::CRS(Matrix const &m)
 	{
 		for (int j = 0; j < m.cols_num(); j++)
 		{
-			if (m.matr()[i][j] != 0)
+			if (m[i][j] != 0)
 			{
-				values[counter] = m.matr()[i][j];
+				values[counter] = m[i][j];
 				cols[counter] = j;
 				counter++;
 			}
@@ -128,7 +128,7 @@ void CRS::collapse_matrix(Matrix const &m)
 	{
 		for (int j = 0; j < m.cols_num(); j++)
 		{
-			if (m.matr()[i][j] != 0) num_of_values++;
+			if (m[i][j] != 0) num_of_values++;
 		}
 	}
 	// Создаем массивы разреженного строчного формата
@@ -149,9 +149,9 @@ void CRS::collapse_matrix(Matrix const &m)
 	{
 		for (int j = 0; j < m.cols_num(); j++)
 		{
-			if (m.matr()[i][j] != 0)
+			if (m[i][j] != 0)
 			{
-				values[counter] = m.matr()[i][j];
+				values[counter] = m[i][j];
 				cols[counter] = j;
 				counter++;
 			}
@@ -178,7 +178,7 @@ Matrix CRS::expand_matrix()
 	{
 		for (int k = pointers[i]; k < pointers[i + 1]; k++)
 		{
-			m.matr()[i][cols[k]] = values[k];
+			m[i][cols[k]] = values[k];
 		}
 	}
 	
