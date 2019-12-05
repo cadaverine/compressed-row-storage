@@ -12,65 +12,54 @@ using namespace std;
 Matrix::Matrix(){}
 
 // Конструктор с инициализацией полей
-Matrix::Matrix(int _rows, int _cols)
-{
+Matrix::Matrix(int _rows, int _cols) {
 	rows = _rows;
 	cols = _cols;
 
-	// Создаем двумерный массив 
+	// Создаем двумерный массив
 	matrix = new double * [rows];
 	matrix[0] = new double[rows * cols];
-	for (int i = 1; i < rows; i++)
-	{
+	for (int i = 1; i < rows; i++) {
 		matrix[i] = matrix[i - 1] + cols;
 	}
 
 	// Заполняем матрицу нулями по умолчанию.
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
 			matrix[i][j] = 0;
 		}
 	}
 }
 
 // Конструктор копирования
-Matrix::Matrix(Matrix const & m)
-{
+Matrix::Matrix(Matrix const & m) {
 	rows = m.rows_num();
 	cols = m.cols_num();
 
-	// Создаем двумерный массив 
+	// Создаем двумерный массив
 	matrix = new double * [rows];
 	matrix[0] = new double[rows * cols];
-	for (int i = 1; i < rows; i++)
-	{
+	for (int i = 1; i < rows; i++) {
 		matrix[i] = matrix[i - 1] + cols;
 	}
 
 	// Копируем значения
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
 			matrix[i][j] = m[i][j];
 		}
 	}
 }
 
-Matrix::~Matrix()
-{
+Matrix::~Matrix() {
 	// Освобождаем память из под двумерного массива
 	delete[] matrix[0];
 	delete[] matrix;
 }
 
 // Оператор присваивания
-Matrix & Matrix::operator=(Matrix const & m)
-{
-	if(this != &m)
-	{
+Matrix & Matrix::operator=(Matrix const & m) {
+	if(this != &m) {
 		delete[] matrix[0];
 		delete[] matrix;
 
@@ -80,16 +69,13 @@ Matrix & Matrix::operator=(Matrix const & m)
 		matrix    = new double * [rows];
 		matrix[0] = new double   [rows * cols];
 
-		for (int i = 1; i < rows; i++)
-		{
+		for (int i = 1; i < rows; i++) {
 			matrix[i] = matrix[i - 1] + cols;
 		}
 
 
-		for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < cols; j++)
-			{
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
 				matrix[i][j] = m[i][j];
 			}
 		}
@@ -98,20 +84,15 @@ Matrix & Matrix::operator=(Matrix const & m)
 }
 
 // Оператор индексации
-double * Matrix::operator[](int n) const
-{
+double * Matrix::operator[](int n) const {
 	return matrix[n];
 }
 
 // Случайная разреженная матрица
-void Matrix::random()
-{
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			if ( rand() % 2 == 0  && rand() % 3 != 0 )
-			{
+void Matrix::random() {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			if ( rand() % 2 == 0  && rand() % 3 != 0 ) {
 				if ( rand() % 2 != 0 ) matrix[i][j] = 	  rand() % 20;
 				if ( rand() % 2 == 0 ) matrix[i][j] = - ( rand() % 20 );
 			}
@@ -120,25 +101,20 @@ void Matrix::random()
 }
 
 // Количество строк
-int Matrix::rows_num() const
-{
+int Matrix::rows_num() const {
 	return rows;
 }
 
 // Количество столбцов
-int Matrix::cols_num() const
-{
+int Matrix::cols_num() const {
 	return cols;
 }
 
 // Консольный вывод матрицы
-void Matrix::console_out()
-{
+void Matrix::console_out() {
 	cout << endl << endl;
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
 			cout << setw(4) << matrix[i][j];
 		}
 		cout << endl << endl;

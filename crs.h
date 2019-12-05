@@ -5,8 +5,7 @@
 #include "matrix.h"
 
 // Класс "разреженный строчный формат" (хранение матриц)
-class CRS
-{
+class CRS {
 private:
 	int values_num;
 	int cols_num;
