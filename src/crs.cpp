@@ -4,14 +4,14 @@
 #include "matrix.h"
 #include "crs.h"
 
-
 using namespace std;
 
 // Конструктор по умолчанию
 CRS::CRS() {}
 
 // Конструктор копирования
-CRS::CRS(CRS const &crs) : values_num(crs.vnum()), cols_num(crs.cnum()), pointers_num(crs.pnum()) {
+CRS::CRS(CRS const &crs) : values_num(crs.vnum()), cols_num(crs.cnum()),
+pointers_num(crs.pnum()), m_rows_num(crs.m_rows()), m_cols_num(crs.m_cols()) {
 	cols 	 = new int	  [cols_num];
 	values 	 = new double [values_num];
 	pointers = new int	  [pointers_num];
@@ -31,37 +31,7 @@ CRS::CRS(CRS const &crs) : values_num(crs.vnum()), cols_num(crs.cnum()), pointer
 
 // Конструктор, принимающий матрицу в качестве аргумента
 CRS::CRS(Matrix const &m) {
-	// Считаем количество ненулевых элементов матрицы
-	int num_of_values = 0;
-	for (int i = 0; i < m.rows_num(); i++) {
-		for (int j = 0; j < m.cols_num(); j++) {
-			if (m[i][j] != 0) num_of_values++;
-		}
-	}
-	// Создаем массивы разреженного строчного формата
-	pointers_num = m.rows_num() + 1;
-	pointers = new int[pointers_num];
-
-	values_num = num_of_values;
-	values = new double[values_num];
-
-	cols_num = num_of_values;
-	cols = new int[cols_num];
-
-	// Свертка исходной матрицы
-	int counter = 0;
-	pointers[0] = 0;
-
-	for (int i = 0; i < m.rows_num(); i++) {
-		for (int j = 0; j < m.cols_num(); j++) {
-			if (m[i][j] != 0) {
-				values[counter] = m[i][j];
-				cols[counter] = j;
-				counter++;
-			}
-		}
-		pointers[i + 1] = counter;
-	}
+	collapse_matrix(m);
 }
 
 // Оператор присваивания
@@ -74,6 +44,8 @@ CRS & CRS::operator=(CRS const &crs) {
 		values_num 	 = crs.vnum();
 		cols_num 	 = crs.cnum();
 		pointers_num = crs.pnum();
+		m_cols_num   = crs.m_cols();
+		m_rows_num   = crs.m_rows();
 
 		for (int i = 0; i < cols_num; i++) {
 			cols[i] = crs.cols_r()[i];
@@ -99,19 +71,19 @@ CRS::~CRS() {
 
 // Свертка матрицы
 void CRS::collapse_matrix(Matrix const &m) {
-	delete[] cols;
-	delete[] values;
-	delete[] pointers;
+	m_cols_num = m.cols_num();
+	m_rows_num = m.rows_num();
 
 	// Считаем количество ненулевых элементов матрицы
 	int num_of_values = 0;
-	for (int i = 0; i < m.rows_num(); i++) {
-		for (int j = 0; j < m.cols_num(); j++) {
+	for (int i = 0; i < m_rows_num; i++) {
+		for (int j = 0; j < m_cols_num; j++) {
 			if (m[i][j] != 0) num_of_values++;
 		}
 	}
+
 	// Создаем массивы разреженного строчного формата
-	pointers_num = m.rows_num() + 1;
+	pointers_num = m_rows_num + 1;
 	pointers = new int[pointers_num];
 
 	values_num = num_of_values;
@@ -124,8 +96,8 @@ void CRS::collapse_matrix(Matrix const &m) {
 	int counter = 0;
 	pointers[0] = 0;
 
-	for (int i = 0; i < m.rows_num(); i++) {
-		for (int j = 0; j < m.cols_num(); j++) {
+	for (int i = 0; i < m_rows_num; i++) {
+		for (int j = 0; j < m_cols_num; j++) {
 			if (m[i][j] != 0) {
 				values[counter] = m[i][j];
 				cols[counter] = j;
@@ -138,17 +110,9 @@ void CRS::collapse_matrix(Matrix const &m) {
 
 // Развертка матрицы
 Matrix CRS::expand_matrix() {
-	int rows = pointers_num - 1;
-	int columns = 0;
+	Matrix m(m_rows_num, m_cols_num);
 
-	for (int i = 0; i < cols_num; i++) {
-		if (columns < cols[i]) columns = cols[i];
-	}
-	columns++;
-
-	Matrix m(rows, columns);
-
-	for (int i = 0; i < m.rows_num(); i++) {
+	for (int i = 0; i < m_rows_num; i++) {
 		for (int k = pointers[i]; k < pointers[i + 1]; k++) {
 			m[i][cols[k]] = values[k];
 		}
@@ -185,6 +149,16 @@ int * CRS::cols_r() const {
 // Указатель на массив pointers
 int * CRS::pointers_r() const {
 	return pointers;
+}
+
+// Количество столбцов исходной матрицы
+int CRS::m_cols() const {
+	return m_cols_num;
+}
+
+// Количество строк исходной матрицы
+int CRS::m_rows() const {
+	return m_rows_num;
 }
 
 // Консольный вывод CRS

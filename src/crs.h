@@ -1,15 +1,19 @@
 #ifndef _CRS
 #define _CRS
 
-
 #include "matrix.h"
 
 // Класс "разреженный строчный формат" (хранение матриц)
 class CRS {
 private:
+	// размеры массивов CRS
 	int values_num;
 	int cols_num;
 	int pointers_num;
+
+	// размеры исходной матрицы
+	int m_rows_num;
+	int m_cols_num;
 
 	double * values;
 	int * cols;
@@ -45,6 +49,10 @@ public:
 
 	// Размер массива pointers
 	int pnum() const;
+
+	// Размеры исходной матрицы
+	int m_rows() const;
+	int m_cols() const;
 
 	// Указатель на массив values
 	double * values_r() const;

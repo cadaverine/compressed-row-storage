@@ -1,7 +1,6 @@
 #ifndef _MATRIX
 #define _MATRIX
 
-
 // Класс матриц
 class Matrix {
 private:
