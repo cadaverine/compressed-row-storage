@@ -1,4 +1,4 @@
-# compressed_row_storage
+# Compressed Row Storage (CRS)
 
 The program realises simple classes of sparse matrices and the compressed row storage format (CRS).
 It contains methods of folding matrices into CRS and unfolding matrices from it.
